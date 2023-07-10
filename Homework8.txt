@@ -1,0 +1,93 @@
+1. Найти все товары с ценой больше 30
+
+db.products.find({price: {$gt:30}})
+
+
+2. Задать значение 10 для свойства "count" у товара с идентификатором 5
+
+db.products.updateOne(
+    { id: 5 },
+    { $set: { count: 10 } } 
+)
+
+3. Найти все товары с категорией "electronics" или "home"
+
+db.products.find({category: {$in: ["electronics", "home"]}})
+
+
+4. Увеличить на 1 поле "countOfOrderedUnits" у всех товаров с категорией "music"
+
+db.products.updateMany(
+    { category: 'music'}, 
+    { $inc: {countOfOrderedUnits: 1} }
+)
+
+
+5. Найти все товары, у которых поле "marks" содержит значения 4 и 5
+
+db.products.find({marks: {$in: [4,5]}})
+
+
+6. Обновить поле "category" на "sports" для всех товаров, у которых поле "category" равно "sport"
+
+db.products.updateMany(
+    { category: 'sport' },
+    { $set: {  category: 'sports' } } 
+)
+
+
+7. Найти все товары, у которых поле "marks" не содержит значение 3
+
+db.products.find({marks: {$nin: [3]}})
+
+
+8. Обновить поле "marks" у товара с идентификатором 8, добавив значение 5
+
+db.products.updateOne(
+    { id: 8 },
+    { $push: { marks: 5 } } 
+)
+
+
+9. Найти все товары, у которых поле "marks" содержит ровно 4 элемента
+
+db.products.find({marks: {$size: 4}})
+
+
+10. Обновить поле "price" у всех товаров с категорией "home", увеличив цену на 10%
+
+db.products.updateMany(
+    { category: 'home' },
+    { $mul: {  price: 1.1 } } 
+)
+
+
+11. Найти все товары, у которых поле "countOfOrderedUnits" больше или равно 10
+
+db.products.find({countOfOrderedUnits: {$gte: 10}})
+
+
+12. Обновить поле "count" у всех товаров с категорией "music", увеличив его на 5
+
+db.products.updateMany(
+    { category: 'music'}, 
+    { $inc: { count: 5 } }
+)
+
+
+13. Найти все товары, у которых поле "marks" содержит все значения [4, 5]
+
+db.products.find({marks:{$nin:[2,3]}})
+
+
+14. Обновить поле "category" у всех товаров, у которых поле "category" равно "sport", заменив его на "outdoor"
+
+db.products.updateMany(
+    { category: 'sports' }, // указала sports т.к. ранее мы меняли категорию sport на sports
+    { $set: {  category: 'outdoor' } } 
+)
+
+
+15. Найти все товары, у которых поле "marks" содержит значения [3, 4, 5]
+
+db.products.find({marks:{$in:[3,4,5]}})
