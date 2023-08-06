@@ -1,0 +1,35 @@
+1. Выведите средний балл по всем предметам для каждого студента.
+db.students.aggregate([
+	{$project:{name:1, lastname:1, avgMark: {$avg: '$marks'}}}
+])
+
+2. Получите список студентов, у которых есть оценка ниже 3.
+db.students.find({marks:{$lt:3}})
+
+3. Подсчитайте количество студентов в каждом классе.
+db.students.aggregate([
+	{$group:{
+		_id: '$class',
+		count:{$sum:1}
+	}}	
+])
+
+4. Рассчитайте суммарное количество оценок по каждому классу.
+db.students.aggregate([
+	{$project:{class:1, countMarks: {$size: '$marks'}}},
+	{$group:{
+		_id: '$class',
+		sum: {$sum:'$countMarks'}
+	}}
+])
+
+5. Рассчитайте средний балл для каждого студента.
+db.students.aggregate([
+	{$project:{name:1, lastname:1, avgMark: {$avg: '$marks'}}},
+	{$group:{
+		_id: null,
+		avgMark: {$avg:'$avgMark'}
+	}}
+])
+
+
