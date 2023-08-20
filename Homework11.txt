@@ -1,0 +1,59 @@
+ 1. Найдите ошибки в след/запросе:
+Увеличить баланс всем юзерам не из Germany на 25%
+
+db.posts.updateOne(
+    { country: 'Germany'  },
+    { $inc: { balance: .75 } }
+)
+
+Правильный ответ:
+
+db.posts.updateMany(
+    { country: {$ne:'Germany'}  },
+    { $inc: { balance: 1.25 } }
+)
+
+
+ 2. Вывести все посты с тегом music 
+db.posts.find(
+	{tag:'music'}
+)
+
+
+ 3. Опишите назначение оператора $skip (и вход/выход)
+оператор пропуска документов. 
+Использование его в запросе позволяет выводить не самые первые/последние в списке документы, 
+а начиная с нужного.
+
+Например в данном запросе мы выводим юзера, находящегося на втором месте по размеру баланса
+db.users.aggregate([
+    { $match: { balance: { $gt: 0 } } },
+    { $sort: { balance: -1 } },
+    { $skip: 1 },
+    { $limit: 1 }
+])
+​
+
+ 4. Вывести названия постов и имена авторов, которые имеют отрицательный баланс
+db.posts.aggregate([
+    {
+        $lookup: {
+            'from': 'users',
+            'localField': 'author_id',
+            'foreignField': '_id',
+            'as': 'author'
+        }
+    },
+    { $unwind: '$author' },
+    { $match: { 'author.balance': { $lt: 0 } } },
+    {
+        $project: {
+            'content': 1,
+            'author_fullname': '$author.fullname',
+            '_id': 0
+        }
+    }
+])
+
+
+
